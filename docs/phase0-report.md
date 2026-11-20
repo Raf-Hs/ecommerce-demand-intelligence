@@ -124,10 +124,24 @@ Key conclusions:
 - **Reason:** Demonstrates multi-source ingestion and schema standardisation on a second, heterogeneous retail transaction source; useful for validating the Bronze/Silver contracts. Joinability with H&M is **none** (different products/customers); it is treated as a separate `source_system` in the unified fact sales model.
 - **Decision:** Optional. Include only if approved; otherwise keep scope to H&M + calendar + synthetic ops.
 
-### 1.7 Rejected / not recommended
+### 1.7 Additional real source — Favorita (Store Sales, large-scale retail) (recommended)
 
-- Unrelated datasets added only to increase source count (e.g. generic Kaggle datasets with no join path) — rejected per project brief.
-- Weather data — considered for seasonal demand but adds an external dependency and a weak join; deferred to a later phase if needed.
+- **Source:** Kaggle competition "Store Sales — Time Series Forecasting" (Corporación Favorita).
+- **URL:** https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data
+- **License / terms:** Competition rules; accept terms on Kaggle.
+- **Key files:** `train.csv`, `stores.csv`, `items.csv`, `transactions.csv`, `oil.csv`, `holidays_events.csv`.
+- **Approx size:** `train.csv` ~3M rows (2013-2017), plus store/item dimensions.
+- **Reason:** Large-scale retail demand dataset used as the **benchmark dataset** for the
+  DuckDB vs PySpark comparative benchmark, and as a second retail demand source. Provides
+  store/item/transactions/oil/holidays — useful for calendar and replenishment modelling.
+- **Joinability:** None with H&M (different retailers/products/customers). Treated as a
+  separate `source_system = 'favorita'` in the unified fact model. Never fabricate relationships.
+- **Decision:** Include as approved (per user). Download required in Phase 1/3.
+
+### 1.8 Rejected / not recommended
+
+- Unrelated datasets added only to increase source count — rejected.
+- Weather data — deferred (external dependency, weak join).
 
 ---
 
@@ -228,9 +242,13 @@ Consumption (demand analysis, inventory coverage, replenishment)
 
 ### 4.3 Processing
 
+- **Primary analytical engine: DuckDB.** Used for Silver/Gold transformations, aggregations,
+  and analytics on the local data lake (Parquet). Chosen for simplicity, speed, and SQL ergonomics.
+- **PySpark: planned, not mandatory initially.** Included in the stack and introduced via a
+  comparative benchmark (DuckDB vs PySpark) on the Favorita dataset before any pipeline depends
+  on distributed processing. Adoption requires a measured, documented benefit.
 - Pandas + PyArrow for profiling and small transforms.
-- PySpark for Bronze→Silver→Gold on the full 31.8M rows.
-- Chunked Pandas only where Spark is not justified; measure both.
+- Chunked Pandas only where neither DuckDB nor Spark is justified; measure both.
 
 ### 4.4 Orchestration
 
@@ -248,15 +266,16 @@ Consumption (demand analysis, inventory coverage, replenishment)
 
 | Capability | Choice | Rationale |
 |---|---|---|
-| Language | Python 3.11 (install in WSL) | Spark/Airflow compatibility; WSL currently has 3.14 (too new). |
-| Data processing (small) | Pandas + PyArrow | Profiling, dev iteration. |
-| Data processing (large) | PySpark 3.5 | Distributed joins/aggregations on 31.8M rows. |
+| Language | Python 3.11 via pyenv (WSL Ubuntu) | Spark/Airflow compatibility; isolated venv. WSL currently has 3.14 (too new). |
+| Data processing (primary) | DuckDB | Fast local analytical engine over Parquet; SQL ergonomics. |
+| Data processing (distributed, planned) | PySpark 3.5 | Benchmark vs DuckDB on Favorita before mandatory use. |
+| Transformations | dbt Core + dbt-duckdb | SQL models, tests, lineage for Silver/Gold. |
 | Storage format | Parquet (Snappy) | Columnar, compressed, partition pruning. |
 | Orchestration | Apache Airflow 2.9 | DAGs, retries, backfills. |
-| Serving DB | PostgreSQL 15 | Gold consumption + metadata. |
-| Data quality | pandera + custom (evaluate GE later) | Lightweight; escalate if needed. |
+| Serving DB | PostgreSQL 15 | Gold consumption + Airflow/metadata. |
+| Data quality | pandera + dbt tests + custom | Lightweight; escalate if needed. |
 | Testing | pytest + pytest-cov | Standard. |
-| Infra | Docker Compose | Reproducible local. |
+| Infra | Docker Compose (local only) | Reproducible local; no paid cloud. |
 | Config | pydantic-settings + .env | Typed config. |
 | Logging | structlog | Structured logs. |
 | CI | GitHub Actions | Lint + tests. |
@@ -297,22 +316,30 @@ ecommerce-demand-intelligence/
 
 ## 8. Risks and open questions
 
-1. H&M dataset not yet downloaded (no Kaggle credentials). Phase 1 ingestion depends on it.
-2. Python version in WSL is 3.14; need 3.11 for Spark/Airflow. Decide: pyenv vs conda vs Docker-only.
-3. UCI Online Retail II inclusion is optional — needs approval.
+1. H&M and Favorita datasets not yet downloaded (no Kaggle credentials). Phase 1 ingestion depends on them.
+2. Python 3.11 provisioning via pyenv in WSL — to be done in Phase 1.
+3. DuckDB vs PySpark benchmark on Favorita — to be designed in Phase 3/6.
 4. Holiday market (Sweden vs others) is an assumption to validate/document.
 5. Price is normalised (0..1), not currency — affects monetary KPIs; document.
+6. Favorita and UCI have no join path to H&M; maintain `source_system` and never fabricate relationships.
 
 ---
 
 ## 9. Approval gate
 
-Phase 0 is complete for review. Before proceeding to Phase 1 (environment + ingestion), please
-confirm:
+Phase 0 updated per user decisions. ADRs recorded in `docs/decisions/`.
 
-- [ ] Architecture and tech stack approved.
-- [ ] Decision on UCI Online Retail II (include / exclude).
-- [ ] Decision on Python 3.11 provisioning (pyenv / conda / Docker-only).
-- [ ] Provide Kaggle credentials or download H&M data into `data/raw/hm/`.
+Confirmed decisions:
+- [x] Medallion architecture (Bronze/Silver/Gold).
+- [x] Parquet data lake.
+- [x] DuckDB primary analytical engine.
+- [x] PostgreSQL for operational/Airflow metadata.
+- [x] Airflow orchestration.
+- [x] dbt Core transformations.
+- [x] PySpark planned + DuckDB vs PySpark benchmark on Favorita.
+- [x] Sources: H&M (primary), UCI Online Retail II (secondary), Favorita (benchmark/large-scale).
+- [x] Python 3.11 via pyenv in WSL2 with isolated venv.
+- [x] Local only, Docker Compose, no paid cloud.
+- [ ] H&M + Favorita + UCI data downloaded into `data/raw/`.
 
-Do not begin implementation of pipelines until these are confirmed.
+Open: provide Kaggle credentials or download data. Then proceed to Phase 1.

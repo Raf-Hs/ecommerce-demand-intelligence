@@ -8,10 +8,11 @@ Production-oriented data engineering platform integrating large, messy, multi-so
 
 ## Highlights (planned)
 
-- Multi-source ingestion of ~31.8M real H&M transactions plus calendar and synthetic ops data.
-- Medallion architecture on a local data lake (Parquet), Pandas → PySpark.
+- Multi-source ingestion of ~31.8M real H&M transactions, plus UCI Online Retail II and Favorita.
+- Medallion architecture on a local data lake (Parquet), DuckDB (primary) with PySpark benchmark.
+- dbt Core transformations, Airflow orchestration, PostgreSQL serving layer.
 - Data quality framework with quarantine and reason codes.
-- Airflow orchestration, PostgreSQL serving layer, pytest, Docker Compose, GitHub Actions.
+- pytest, Docker Compose, GitHub Actions.
 
 ## Repository layout
 
