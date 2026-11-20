@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Data (never commit raw or generated data)
+data/raw/
+data/bronze/
+data/silver/
+data/gold/
+data/samples/
+*.csv
+*.parquet
+*.jsonl
+*.zip
+*.tar.gz
+
+# Secrets
+.env
+*.key
+*.pem
+kaggle.json
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Airflow
+airflow.db
+logs/
+standalone_admin_password.txt
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Docker
+*.pid
