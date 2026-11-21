@@ -6,7 +6,6 @@ from pathlib import Path
 import pandas as pd
 
 from src.ingestion.base import write_bronze
-from src.utils.config import settings
 from src.utils.logging import get_logger
 
 log = get_logger("ingestion.hm_sample")

@@ -1,6 +1,7 @@
 """Structured logging configuration."""
 
 import logging
+
 import structlog
 
 from src.utils.config import settings

@@ -21,7 +21,6 @@ def ingest_uci() -> list[Path]:
     xl = pd.ExcelFile(raw)
     for sheet in xl.sheet_names:
         df = pd.read_excel(raw, sheet_name=sheet)
-        table = "transactions"
         # tag the sheet origin for traceability
         df["_source_sheet"] = sheet
         path = write_bronze(df, "uci", f"transactions_{sheet.replace(' ', '_').lower()}", str(raw))
