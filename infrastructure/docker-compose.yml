@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: ecommerce-demand-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ecommerce_demand}
+      POSTGRES_USER: ${POSTGRES_USER:-ecommerce}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ecommerce} -d ${POSTGRES_DB:-ecommerce_demand}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  pgdata:
+    name: ecommerce-demand-pgdata
+
+# Apache Airflow and Spark services are intentionally NOT included yet.
+# They will be added in Phase 5 (orchestration) and Phase 3/6 (distributed
+# processing benchmark) respectively, following the approved architecture.
+# Do not start them prematurely.
