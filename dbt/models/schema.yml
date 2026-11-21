@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_hm_articles
+    columns:
+      - name: article_id
+        tests: [not_null, unique]
+  - name: stg_hm_transactions
+    columns:
+      - name: article_id
+        tests: [not_null]
+      - name: price
+        tests: [not_null]
+  - name: fct_hm_daily_demand
+    columns:
+      - name: sale_date
+        tests: [not_null]
+      - name: article_id
+        tests: [not_null]

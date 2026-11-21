@@ -1,0 +1,7 @@
+ecommerce_demand:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../data/gold/warehouse.duckdb
+      threads: 4
