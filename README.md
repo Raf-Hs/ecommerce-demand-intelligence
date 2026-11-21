@@ -18,7 +18,16 @@ Production-oriented data engineering platform integrating large, messy, multi-so
 
 See `docs/phase0-report.md` §7.
 
-## Development environment (Phase 1 — Task 1)
+## Local infrastructure (Phase 1)
+
+```mermaid
+flowchart LR
+    Dev[Developer WSL2] --> Venv[Python 3.11 venv]
+    Dev --> Compose[Docker Compose]
+    Compose --> PG[(PostgreSQL 15 :5433)]
+    Venv --> DuckDB[DuckDB]
+    Venv --> Pandas[Pandas / PyArrow]
+```
 
 The project pins Python **3.11.9** via pyenv (see `.python-version`). The system Python
 (`/usr/bin/python3`, 3.14.x on Ubuntu 26.04) is intentionally left untouched.
