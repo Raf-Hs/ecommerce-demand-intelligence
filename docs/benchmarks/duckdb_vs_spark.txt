@@ -1,0 +1,4 @@
+dataset: data/silver/uci_transactions.parquet
+duckdb_seconds: 0.3643
+spark_seconds: 24.1690
+ratio_spark_over_duckdb: 66.34
