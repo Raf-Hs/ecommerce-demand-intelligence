@@ -1,41 +1,20 @@
-# Core
+# Core runtime dependencies (Phase 1+)
+# Installed in the project virtual environment.
 python-dotenv>=1.0.0
 pydantic>=2.6.0
 pydantic-settings>=2.2.0
-
-# Data processing
 pandas>=2.2.0
 pyarrow>=15.0.0
 numpy>=1.26.0
-
-# Analytical engine (primary)
 duckdb>=1.0.0
-
-# Distributed processing (planned, benchmark before mandatory use)
-pyspark>=3.5.0
-
-# Transformations
-dbt-core>=1.8.0
-dbt-duckdb>=1.8.0
-
-# Data quality
-pandera>=0.18.0
-
-# Orchestration (Phase 5+)
-apache-airflow>=2.9.0
-
-# Database
+structlog>=24.1.0
+holidays>=0.46
+tqdm>=4.66.0
 psycopg2-binary>=2.9.0
 sqlalchemy>=2.0.0
 
-# Testing
-pytest>=8.0.0
-pytest-cov>=5.0.0
-
-# Logging
-structlog>=24.1.0
-
-# Utilities
-holidays>=0.46
-tqdm>=4.66.0
-
+# --- Optional dependencies introduced in later phases (not installed now) ---
+# Phase 2 (data quality): pandera>=0.18.0
+# Phase 3 (distributed processing): pyspark>=3.5.0
+# Phase 4 (SQL transformations): dbt-core>=1.8.0, dbt-duckdb>=1.8.0
+# Phase 5 (orchestration): apache-airflow>=2.9.0

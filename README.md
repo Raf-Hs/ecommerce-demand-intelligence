@@ -18,11 +18,36 @@ Production-oriented data engineering platform integrating large, messy, multi-so
 
 See `docs/phase0-report.md` §7.
 
-## Getting started (Phase 0)
+## Development environment (Phase 1 — Task 1)
 
-1. Read `docs/phase0-report.md`.
-2. Review and approve the architecture and open questions.
-3. Provide the H&M dataset (see below) or Kaggle credentials.
+The project pins Python **3.11.9** via pyenv (see `.python-version`). The system Python
+(`/usr/bin/python3`, 3.14.x on Ubuntu 26.04) is intentionally left untouched.
+
+### Provision Python 3.11.9
+
+```bash
+# build dependencies (Ubuntu)
+sudo apt update && sudo apt install -y \
+  build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
+  libsqlite3-dev curl git libncurses-dev xz-utils tk-dev \
+  libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
+# pyenv
+curl https://pyenv.run | bash
+# add to ~/.bashrc (once):
+#   export PYENV_ROOT="$HOME/.pyenv"
+#   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+#   eval "$(pyenv init -)"
+#   eval "$(pyenv virtualenv-init -)"
+
+pyenv install 3.11.9
+
+cd ~/projects/ecommerce-demand-intelligence
+pyenv local 3.11.9   # creates .python-version
+python --version      # Python 3.11.9
+```
+
+A virtual environment and project dependencies are provisioned in Phase 1 — Task 2.
 
 ### Data (not committed)
 
