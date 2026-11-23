@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="900" height="260" fill="#0f172a"/>
+  <g font-size="13" fill="#e2e8f0">
+    <rect x="20" y="90" width="120" height="50" rx="8" fill="#1e293b" stroke="#334155"/>
+    <text x="80" y="120" text-anchor="middle">Sources</text>
+
+    <rect x="170" y="90" width="120" height="50" rx="8" fill="#1e293b" stroke="#334155"/>
+    <text x="230" y="120" text-anchor="middle">Ingestion</text>
+
+    <rect x="320" y="90" width="120" height="50" rx="8" fill="#78350f" stroke="#b45309"/>
+    <text x="380" y="120" text-anchor="middle" fill="#fde68a">Bronze</text>
+
+    <rect x="470" y="90" width="120" height="50" rx="8" fill="#1e3a5f" stroke="#1d4ed8"/>
+    <text x="530" y="120" text-anchor="middle" fill="#bfdbfe">Silver</text>
+
+    <rect x="620" y="90" width="120" height="50" rx="8" fill="#14532d" stroke="#16a34a"/>
+    <text x="680" y="120" text-anchor="middle" fill="#bbf7d0">Gold</text>
+
+    <rect x="770" y="90" width="110" height="50" rx="8" fill="#1e293b" stroke="#334155"/>
+    <text x="825" y="120" text-anchor="middle">Serving</text>
+
+    <line x1="140" y1="115" x2="170" y2="115" stroke="#64748b" stroke-width="2"/>
+    <line x1="290" y1="115" x2="320" y2="115" stroke="#64748b" stroke-width="2"/>
+    <line x1="440" y1="115" x2="470" y2="115" stroke="#64748b" stroke-width="2"/>
+    <line x1="590" y1="115" x2="620" y2="115" stroke="#64748b" stroke-width="2"/>
+    <line x1="740" y1="115" x2="770" y2="115" stroke="#64748b" stroke-width="2"/>
+
+    <text x="450" y="200" text-anchor="middle" font-size="11" fill="#94a3b8">
+      Medallion data lake: Bronze (raw) → Silver (cleaned) → Gold (analytical) on Parquet
+    </text>
+    <text x="450" y="220" text-anchor="middle" font-size="11" fill="#94a3b8">
+      DuckDB (primary) · dbt Core · Airflow · PostgreSQL · Docker Compose
+    </text>
+  </g>
+</svg>

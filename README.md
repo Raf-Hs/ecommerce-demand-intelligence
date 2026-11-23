@@ -1,12 +1,33 @@
 # E-commerce Inventory & Demand Intelligence Platform
 
-A production-oriented Data Engineering platform that integrates large, messy, multi-source
-retail data into a Medallion data lake (Bronze / Silver / Gold) supporting demand analysis
-and inventory planning.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white" alt="Python 3.11">
+  <img src="https://img.shields.io/badge/DuckDB-2.0-FFF000?logo=duckdb&logoColor=black" alt="DuckDB">
+  <img src="https://img.shields.io/badge/dbt-Core-FF694B?logo=dbt&logoColor=white" alt="dbt">
+  <img src="https://img.shields.io/badge/Airflow-Orchestration-017CEE?logo=apacheairflow&logoColor=white" alt="Airflow">
+  <img src="https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions&logoColor=white" alt="CI">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License">
+</p>
 
-> Built as a portfolio project demonstrating Data Engineering capabilities: multi-source
-> ingestion, data quality engineering, distributed vs. analytical processing, dimensional
-> modeling, synthetic operational data, orchestration, testing, and CI/CD.
+> A production-oriented Data Engineering platform that integrates messy, multi-source
+> retail data into a Medallion data lake (Bronze / Silver / Gold) supporting demand
+> analysis and inventory planning.
+
+## Table of contents
+
+- [Business problem](#business-problem)
+- [Architecture](#architecture)
+- [Technology stack](#technology-stack)
+- [Data sources](#data-sources)
+- [Repository structure](#repository-structure)
+- [Getting started](#getting-started)
+- [Results](#results)
+- [Data quality](#data-quality)
+- [Limitations](#limitations)
+- [Documentation](#documentation)
+- [License](#license)
 
 ## Business problem
 
@@ -15,15 +36,13 @@ signals, and operational inventory data. Inconsistent identifiers, missing recor
 duplicates, and delayed updates make demand and inventory planning unreliable.
 
 This platform consolidates those sources into reliable, structured datasets that support
-demand velocity, seasonality, inventory coverage, and replenishment analysis. Demand
-forecasting and inventory analytics are downstream consumers of the platform; the primary
-focus is Data Engineering.
+demand velocity, seasonality, inventory coverage, and replenishment analysis.
 
 ## Architecture
 
-```mermaid
+![Architecture](docs/assets/architecture.svg)
 flowchart LR
-    Sources[H&M / UCI / Favorita / Calendar / Synthetic Ops] --> Ingestion[Ingestion + metadata]
+    Sources[Sources] --> Ingestion[Ingestion + metadata]
     Ingestion --> Bronze[Bronze - raw Parquet]
     Bronze --> Silver[Silver - cleaned & validated]
     Silver --> Gold[Gold - analytical models]
@@ -35,15 +54,14 @@ flowchart LR
 Medallion layers:
 
 - **Bronze**: original source preservation with ingestion metadata (Parquet).
-- **Silver**: standardized schemas, normalized identifiers, validation, quarantine.
-- **Gold**: dimensional/analytical models (demand, velocity, inventory, replenishment).
+- **Silver**: standardized schemas, normalized identifiers, validation, quarantine design.
+- **Gold**: analytical models (demand, velocity, inventory, replenishment).
 
 ## Technology stack
 
 | Capability | Technology |
 |---|---|
 | Language | Python 3.11 |
-| SQL | SQL |
 | Primary analytical engine | DuckDB |
 | Distributed processing | Apache Spark / PySpark (benchmarked) |
 | Storage | Apache Parquet |
@@ -65,7 +83,7 @@ Medallion layers:
 | UCI Online Retail II | Real (UCI) | Heterogeneous retail transactions, returns |
 | Corporación Favorita Store Sales | Real (Kaggle) | Large-scale retail demand & benchmark |
 | Calendar / holidays | Real (python-holidays) | Seasonality |
-| Synthetic ops (warehouses, inventory, POs, suppliers) | Synthetic (labelled) | Missing operational data |
+| Synthetic ops | Synthetic (labelled) | Missing operational data |
 
 Source-specific identifiers are never mixed. Every record carries `source_system`.
 
@@ -74,20 +92,20 @@ Source-specific identifiers are never mixed. Every record carries `source_system
 ```
 ecommerce-demand-intelligence/
 ├── data/            # raw, bronze, silver, gold, samples (gitignored)
-├── src/             # ingestion, transformation, storage, utils
+├── src/             # ingestion, transformation, utils
 ├── scripts/         # runners, profiling, benchmarks
 ├── dbt/             # dbt Core models and tests
 ├── dags/            # Airflow DAGs
 ├── tests/           # pytest
 ├── infrastructure/  # Docker Compose
-├── docs/            # architecture, ADRs, data dictionary, benchmarks
+├── docs/            # architecture, ADRs, benchmarks, reports
 └── .github/         # CI/CD workflows
 ```
 
 ## Getting started
 
 ### Prerequisites
-- WSL2 + Ubuntu, Docker Desktop, Git, pyenv.
+WSL2 + Ubuntu, Docker Desktop, Git, pyenv.
 
 ### Environment
 ```bash
@@ -130,14 +148,13 @@ PYTHONPATH=. .venv/bin/python scripts/benchmark_duckdb_vs_spark.py
 
 ## Results
 
-- Bronze ingested: H&M sample (5k articles, 1.1k customers, 15.8k transactions) and
-  UCI Online Retail II (~1.07M transactions).
-- Silver standardized and validated; exact-duplicate transaction rows collapsed.
-- Gold models: daily product demand, product velocity, UCI daily demand, synthetic
-  inventory snapshots/POs/adjustments.
-- dbt: 4 models, 6 data tests — all passing.
-- Benchmark: DuckDB 0.36s vs PySpark 24.17s on ~1.07M rows (ratio 66x) in local mode.
-- pytest: 2 passing; ruff: all checks passed.
+| Metric | Value |
+|---|---|
+| Bronze ingested | H&M sample (5k articles, 1.1k customers, 15.8k txns) + UCI (~1.07M txns) |
+| dbt models / tests | 4 models, 6 tests — all passing |
+| Benchmark | DuckDB 0.36s vs PySpark 24.17s (ratio 66x) |
+| pytest | 2 passing |
+| ruff | all checks passed |
 
 ## Data quality
 
@@ -149,24 +166,24 @@ PYTHONPATH=. .venv/bin/python scripts/benchmark_duckdb_vs_spark.py
 
 ## Limitations
 
-- Full H&M and Favorita datasets require Kaggle credentials (not present); development
-  uses the public H&M sample and UCI data. Ingestion code targets the official CSVs.
-- Airflow and Spark are configured as code but not deployed in this local setup beyond
-  the benchmark.
+- Full H&M and Favorita datasets require Kaggle credentials; development uses the
+  public H&M sample and UCI data.
+- Airflow and Spark are configured as code but not deployed beyond the benchmark.
 - Azure/Databricks/Delta are evaluated as future evolution, not implemented.
 - Benchmark is a single local run on a small dataset.
 
 ## Documentation
 
-- `docs/phase0-report.md` — Phase 0 research.
-- `docs/setup.md` — environment setup.
-- `docs/PROJECT_ENGINEERING_REPORT.md` — comprehensive engineering report.
-- `docs/PROJECT_STATUS.md` — project status.
-- `docs/TECHNICAL_INTERVIEW_GUIDE.md` — interview guide.
-- `docs/PROJECT_COMPONENT_INVENTORY.md` — component inventory.
-- `docs/decisions/` — ADRs.
-- `docs/benchmarks/duckdb_vs_spark.md` — benchmark report.
-- `docs/data-dictionary/` — data dictionary.
+- [Phase 0 research](docs/phase0-report.md)
+- [Setup guide](docs/setup.md)
+- [Architecture overview](docs/architecture/overview.md)
+- [Engineering report](docs/PROJECT_ENGINEERING_REPORT.md)
+- [Project status](docs/PROJECT_STATUS.md)
+- [Component inventory](docs/PROJECT_COMPONENT_INVENTORY.md)
+- [Interview guide](docs/TECHNICAL_INTERVIEW_GUIDE.md)
+- [ADRs](docs/decisions/)
+- [Benchmark report](docs/benchmarks/duckdb_vs_spark.md)
+- [Data dictionary](docs/data-dictionary/README.md)
 
 ## License
 
