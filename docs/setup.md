@@ -48,6 +48,20 @@ docker compose -f infrastructure/docker-compose.yml --env-file .env up -d
 docker compose -f infrastructure/docker-compose.yml ps
 ```
 
+## dbt
+```bash
+cd dbt && ../.venv/bin/dbt build --profiles-dir .
+```
+
+## Airflow (not deployed)
+The DAG is defined in `dags/ecommerce_demand_pipeline.py`. Running it requires an
+Airflow installation (not included in the venv). See `docs/PROJECT_STATUS.md`.
+
+## Benchmark (DuckDB vs PySpark)
+```bash
+PYTHONPATH=. .venv/bin/python scripts/benchmark_duckdb_vs_spark.py
+```
+
 ## Troubleshooting
 
 - **`python` not found after pyenv install:** ensure `~/.bashrc` contains the pyenv

@@ -51,7 +51,7 @@ Medallion layers:
 | Transformations | dbt Core |
 | Orchestration | Apache Airflow |
 | Operational database | PostgreSQL |
-| Data quality | Pandera, pytest, dbt tests |
+| Data quality | pytest, dbt tests (Pandera planned) |
 | Infrastructure | Docker Compose |
 | Configuration | pydantic-settings |
 | Logging | structlog |
@@ -143,9 +143,9 @@ PYTHONPATH=. .venv/bin/python scripts/benchmark_duckdb_vs_spark.py
 
 - Missingness encoded as NaN/empty (not JSON null) — explicitly handled.
 - `article_id` zero-padded to 10 digits (leading-zero preservation).
-- Quarantine approach for invalid/rejected rows (reason codes).
+- Quarantine approach documented (not yet implemented as separate tables).
 - Repeated purchases preserved; exact full-row duplicates collapsed.
-- Referential integrity validated on samples.
+- Referential integrity validated on H&M sample (0 violations).
 
 ## Limitations
 
@@ -160,9 +160,13 @@ PYTHONPATH=. .venv/bin/python scripts/benchmark_duckdb_vs_spark.py
 
 - `docs/phase0-report.md` — Phase 0 research.
 - `docs/setup.md` — environment setup.
+- `docs/PROJECT_ENGINEERING_REPORT.md` — comprehensive engineering report.
+- `docs/PROJECT_STATUS.md` — project status.
+- `docs/TECHNICAL_INTERVIEW_GUIDE.md` — interview guide.
+- `docs/PROJECT_COMPONENT_INVENTORY.md` — component inventory.
 - `docs/decisions/` — ADRs.
 - `docs/benchmarks/duckdb_vs_spark.md` — benchmark report.
-- `docs/data-dictionary/` — initial data dictionary.
+- `docs/data-dictionary/` — data dictionary.
 
 ## License
 

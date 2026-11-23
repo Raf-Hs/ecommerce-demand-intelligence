@@ -1,7 +1,7 @@
 # Decision 0001 — Phase 0 source selection and architecture
 
 - **Date:** Phase 0
-- **Status:** Proposed (pending approval)
+- **Status:** Accepted (implemented in Phases 1+)
 
 ## Context
 Need a primary real dataset, optional secondary real dataset, calendar source, and synthetic
@@ -17,5 +17,6 @@ operational data to support demand + inventory analytics.
 6. Data quality: quarantine with reason codes; never silently discard.
 
 ## Consequences
-- Phase 1 ingestion blocked until H&M data is available locally.
-- Python 3.11 required (WSL currently 3.14).
+- UCI Online Retail II ingested and processed (not optional anymore).
+- H&M full dataset pending Kaggle credentials; sample used for development.
+- Python 3.11 provisioned via pyenv (WSL now 3.14 system, 3.11 project).

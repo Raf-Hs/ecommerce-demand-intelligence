@@ -2,7 +2,7 @@
 
 **Project:** E-commerce Inventory & Demand Intelligence Platform
 **Phase:** 0 — Research and Architecture
-**Status:** Draft for review (awaiting approval before Phase 1 implementation)
+**Status:** Completed (implemented in Phases 1+)
 
 ---
 
@@ -316,30 +316,28 @@ ecommerce-demand-intelligence/
 
 ## 8. Risks and open questions
 
-1. H&M and Favorita datasets not yet downloaded (no Kaggle credentials). Phase 1 ingestion depends on them.
-2. Python 3.11 provisioning via pyenv in WSL — to be done in Phase 1.
-3. DuckDB vs PySpark benchmark on Favorita — to be designed in Phase 3/6.
-4. Holiday market (Sweden vs others) is an assumption to validate/document.
-5. Price is normalised (0..1), not currency — affects monetary KPIs; document.
-6. Favorita and UCI have no join path to H&M; maintain `source_system` and never fabricate relationships.
+1. H&M and Favorita full datasets not downloaded (Kaggle credentials unavailable). Ingestion code
+   targets official CSVs; development uses the public H&M sample and UCI data.
+2. DuckDB vs PySpark benchmark completed on UCI (~1.07M rows), not Favorita (unavailable).
+3. Holiday market (Sweden vs others) remains an assumption to validate/document.
+4. Price is normalised (0..1), not currency — affects monetary KPIs; document.
+5. Favorita and UCI have no join path to H&M; `source_system` maintained, no fabricated relationships.
 
 ---
 
 ## 9. Approval gate
 
-Phase 0 updated per user decisions. ADRs recorded in `docs/decisions/`.
+Phase 0 completed and implemented in subsequent phases. ADRs recorded in `docs/decisions/`.
 
-Confirmed decisions:
+All decisions confirmed and implemented:
 - [x] Medallion architecture (Bronze/Silver/Gold).
 - [x] Parquet data lake.
 - [x] DuckDB primary analytical engine.
 - [x] PostgreSQL for operational/Airflow metadata.
-- [x] Airflow orchestration.
+- [x] Airflow orchestration (DAG defined).
 - [x] dbt Core transformations.
-- [x] PySpark planned + DuckDB vs PySpark benchmark on Favorita.
-- [x] Sources: H&M (primary), UCI Online Retail II (secondary), Favorita (benchmark/large-scale).
+- [x] PySpark planned + DuckDB vs PySpark benchmark on UCI (Favorita unavailable).
+- [x] Sources: H&M (primary, sample used), UCI Online Retail II (implemented), Favorita (pending access).
 - [x] Python 3.11 via pyenv in WSL2 with isolated venv.
 - [x] Local only, Docker Compose, no paid cloud.
-- [ ] H&M + Favorita + UCI data downloaded into `data/raw/`.
-
-Open: provide Kaggle credentials or download data. Then proceed to Phase 1.
+- [ ] Full H&M + Favorita datasets downloaded (Kaggle credentials unavailable).

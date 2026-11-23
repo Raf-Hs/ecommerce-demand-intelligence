@@ -10,11 +10,12 @@ engines: DuckDB (local, fast, SQL) and PySpark (distributed).
 ## Decision
 - DuckDB is the **primary** analytical engine for Silver/Gold transformations and analytics.
 - PySpark is **planned but not mandatory** for initial pipelines.
-- Before making Spark mandatory, run a **comparative benchmark (DuckDB vs PySpark)** on the
-  Favorita dataset and document measurable benefits (duration, memory, scalability).
+- Before making Spark mandatory, run a **comparative benchmark (DuckDB vs PySpark)** on an
+  available dataset (UCI Online Retail II; Favorita unavailable due to Kaggle credentials)
+  and document measurable benefits (duration, memory, scalability).
 - Adoption of Spark for a given pipeline requires evidence from that benchmark.
 
 ## Consequences
 - Simpler initial implementation and lower resource requirements.
 - Spark code paths remain optional until justified.
-- Benchmark becomes a Phase 6 deliverable.
+- Benchmark completed on UCI (~1.07M rows): DuckDB 0.36s vs PySpark 24.17s (ratio 66x).
