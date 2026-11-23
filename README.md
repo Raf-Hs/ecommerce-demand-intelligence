@@ -164,6 +164,20 @@ PYTHONPATH=. .venv/bin/python scripts/benchmark_duckdb_vs_spark.py
 - Repeated purchases preserved; exact full-row duplicates collapsed.
 - Referential integrity validated on H&M sample (0 violations).
 
+## Data insights
+
+Real measurements from the ingested datasets (H&M sample and UCI Online Retail II):
+
+![H&M daily transactions](docs/assets/insight_hm_daily_transactions.png)
+![H&M top product groups](docs/assets/insight_hm_top_product_groups.png)
+![H&M sales channel](docs/assets/insight_hm_sales_channel.png)
+![UCI daily revenue](docs/assets/insight_uci_daily_revenue.png)
+![UCI top countries](docs/assets/insight_uci_top_countries.png)
+![H&M customer missingness](docs/assets/insight_hm_customer_missingness.png)
+![UCI transaction types](docs/assets/insight_uci_transaction_types.png)
+
+Regenerate with `PYTHONPATH=. python scripts/generate_insights.py`.
+
 ## Limitations
 
 - Full H&M and Favorita datasets require Kaggle credentials; development uses the
